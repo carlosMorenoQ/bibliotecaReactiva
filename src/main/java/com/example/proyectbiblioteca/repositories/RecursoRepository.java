@@ -11,7 +11,7 @@ public interface RecursoRepository extends MongoRepository<Recurso, String> {
 
 
 
-//    Recurso findByCodigo(String codido);
+    Recurso findByCodigo(String codido);
 //
 //    List<Recurso> findByTipo(String tipoRecurso);
 //
