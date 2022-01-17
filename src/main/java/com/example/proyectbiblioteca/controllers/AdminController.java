@@ -5,6 +5,7 @@ import com.example.proyectbiblioteca.model_dto.MensajeDTO;
 import com.example.proyectbiblioteca.usecases.AdminRecursoUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/admin")
@@ -14,19 +15,19 @@ public class AdminController {
     AdminRecursoUseCase adminRecursoUseCase;
 
     @GetMapping("/disponibilidad/{codigoRecurso}")
-    public DisponibilidadDTO consultarDisponibilidad(
+    public Mono<DisponibilidadDTO> consultarDisponibilidad(
             @PathVariable("codigoRecurso") String codigoRecurso) {
         return adminRecursoUseCase.consultarDisponibilidad(codigoRecurso);
     }
 
     @PutMapping("/prestar/{codigoRecurso}")
-    public MensajeDTO prestarRecurso(
+    public Mono<MensajeDTO> prestarRecurso(
             @PathVariable("codigoRecurso") String codigoRecurso) {
         return adminRecursoUseCase.prestarRecurso(codigoRecurso);
     }
 
     @PutMapping("/devolver/{codigoRecurso}")
-    public MensajeDTO devolverRecurso(
+    public Mono<MensajeDTO> devolverRecurso(
             @PathVariable("codigoRecurso") String codigoRecurso) {
         return adminRecursoUseCase.devolverRecurso(codigoRecurso);
     }

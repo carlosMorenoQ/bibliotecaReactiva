@@ -5,6 +5,8 @@ import com.example.proyectbiblioteca.model_dto.RecursoDTO;
 import com.example.proyectbiblioteca.usecases.CrudRecursoUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -16,8 +18,8 @@ public class CrudController {
     CrudRecursoUseCase crudRecursoUseCase;
 
     @PostMapping("/crear")
-    public RecursoDTO crear(@RequestBody RecursoDTO recursoDTO){
-        return  crudRecursoUseCase.crearRecurso(recursoDTO);
+    public Mono<RecursoDTO> crear(@RequestBody RecursoDTO recursoDTO){
+        return crudRecursoUseCase.crearRecurso(recursoDTO);
     }
 
     @DeleteMapping("/eliminar/{id}")
@@ -26,12 +28,12 @@ public class CrudController {
     }
 
     @PutMapping("/actualizar")
-    public RecursoDTO actualizarRecurso(@RequestBody RecursoDTO recursoDTO){
+    public Mono<RecursoDTO> actualizarRecurso(@RequestBody RecursoDTO recursoDTO){
         return crudRecursoUseCase.actualizarRecurso(recursoDTO);
     }
 
     @GetMapping("/recursos")
-    public List<RecursoDTO> obtenerRecursos(){
+    public Flux<RecursoDTO> obtenerRecursos(){
         return crudRecursoUseCase.obtenerRecursos();
     }
 

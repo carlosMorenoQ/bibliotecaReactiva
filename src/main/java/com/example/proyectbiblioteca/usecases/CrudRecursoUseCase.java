@@ -1,14 +1,12 @@
 package com.example.proyectbiblioteca.usecases;
 
 
-import com.example.proyectbiblioteca.collections.Recurso;
 import com.example.proyectbiblioteca.model_dto.RecursoDTO;
 import com.example.proyectbiblioteca.repositories.RecursoRepository;
 import com.example.proyectbiblioteca.utils.Mapper;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 public class CrudRecursoUseCase {
@@ -22,31 +20,24 @@ public class CrudRecursoUseCase {
         this.mapper = mapper;
     }
 
-    public RecursoDTO crearRecurso(RecursoDTO recursoDTO) {
+    public Mono<RecursoDTO> crearRecurso(RecursoDTO recursoDTO) {
         recursoDTO.setEstaPrestado(false);
-        return mapper.mapperEntityToRecursoDTO()
-                .apply(recursoRepository.save(
-                        mapper.mapperRecursoDTOToEntity(null)
-                                .apply(recursoDTO)));
+        return recursoRepository.save(mapper.mapperRecursoDTOToEntity(null)
+                .apply(recursoDTO)).map(recurso -> mapper.mapperEntityToRecursoDTO().apply(recurso));
     }
 
     public void eliminarRecurso(String idRecurso) {
         recursoRepository.deleteById(idRecurso);
     }
 
-
-    public RecursoDTO actualizarRecurso(RecursoDTO recursoDTO) {
-        return mapper.mapperEntityToRecursoDTO()
-                .apply(recursoRepository.save(
-                        mapper.mapperRecursoDTOToEntity(recursoDTO.getId())
-                                .apply(recursoDTO)));
+    public Mono<RecursoDTO> actualizarRecurso(RecursoDTO recursoDTO) {
+        return recursoRepository.save(mapper.mapperRecursoDTOToEntity(recursoDTO.getId())
+                .apply(recursoDTO)).map(recurso -> mapper.mapperEntityToRecursoDTO().apply(recurso));
     }
 
-    public List<RecursoDTO> obtenerRecursos() {
+    public Flux<RecursoDTO> obtenerRecursos() {
         return recursoRepository.findAll()
-                .stream()
-                .map(recurso -> mapper.mapperEntityToRecursoDTO().apply(recurso))
-                .collect(Collectors.toList());
+                .map(recurso -> mapper.mapperEntityToRecursoDTO().apply(recurso));
     }
 
 

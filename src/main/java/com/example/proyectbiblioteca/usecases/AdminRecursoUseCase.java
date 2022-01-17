@@ -6,6 +6,7 @@ import com.example.proyectbiblioteca.model_dto.MensajeDTO;
 import com.example.proyectbiblioteca.repositories.RecursoRepository;
 import com.example.proyectbiblioteca.utils.Mapper;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.Date;
 
@@ -22,9 +23,9 @@ public class AdminRecursoUseCase {
         this.mapper = mapper;
     }
 
-    public DisponibilidadDTO consultarDisponibilidad(String codigoRecurso){
+    public Mono<DisponibilidadDTO> consultarDisponibilidad(String codigoRecurso){
         var disponibilidad = new DisponibilidadDTO();
-        var recurso = recursoRepository.findByCodigo(codigoRecurso);
+        var recurso = recursoRepository.findByCodigo(codigoRecurso).block();
 
         if(recurso == null){
             disponibilidad.setEstaDisponible(false);
@@ -38,15 +39,15 @@ public class AdminRecursoUseCase {
             disponibilidad.setEstaDisponible(true);
         }
 
-        return disponibilidad;
+        return Mono.just(disponibilidad);
     }
 
-    public MensajeDTO prestarRecurso(String codigoRecurso){
-        var estadoPrestamo = consultarDisponibilidad(codigoRecurso);
+    public Mono<MensajeDTO> prestarRecurso(String codigoRecurso){
+        var estadoPrestamo = consultarDisponibilidad(codigoRecurso).block();
         var mensajeDTO =new MensajeDTO();
 
         if (Boolean.TRUE.equals(estadoPrestamo.getEstaDisponible())){
-            var recurso = recursoRepository.findByCodigo(codigoRecurso);
+            var recurso = recursoRepository.findByCodigo(codigoRecurso).block();
             recurso.setEstaPrestado(true);
             recurso.setFechaPrestamo(new Date());
             recursoRepository.save(recurso);
@@ -54,12 +55,12 @@ public class AdminRecursoUseCase {
         }else{
             mensajeDTO.setMensaje("El recurso no se encuentra disponible o ya esta en prestamo");
         }
-        return mensajeDTO;
+        return Mono.just(mensajeDTO);
     }
 
 
-    public MensajeDTO devolverRecurso(String codigoRecurso){
-        var recurso = recursoRepository.findByCodigo(codigoRecurso);
+    public Mono<MensajeDTO> devolverRecurso(String codigoRecurso){
+        var recurso = recursoRepository.findByCodigo(codigoRecurso).block();
         var mensajeDTO =new MensajeDTO();
 
         if(recurso == null){
@@ -73,7 +74,7 @@ public class AdminRecursoUseCase {
             mensajeDTO.setMensaje("El recurso no se encuentra prestado");
         }
 
-        return mensajeDTO;
+        return Mono.just(mensajeDTO);
     }
 
 
