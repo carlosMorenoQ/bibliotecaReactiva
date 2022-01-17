@@ -20,12 +20,12 @@ public class RecursoDTO {
     }
 
     public RecursoDTO(
-            String codigo,
-            String titulo,
-            String descripcion,
-            String autor,
-            String tipo,
-            String tematica) {
+                String codigo,
+                String titulo,
+                String descripcion,
+                String autor,
+                String tipo,
+                String tematica) {
         this.codigo = codigo;
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -34,7 +34,8 @@ public class RecursoDTO {
         this.tematica = tematica;
     }
 
-    public RecursoDTO(String codigo,
+    public RecursoDTO(String id,
+                      String codigo,
                       String titulo,
                       String descripcion,
                       String autor,
@@ -42,6 +43,7 @@ public class RecursoDTO {
                       String tematica,
                       Boolean estaPrestado,
                       Date fechaPrestamo) {
+        this.id = id;
         this.codigo = codigo;
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -123,4 +125,6 @@ public class RecursoDTO {
     public void setFechaPrestamo(Date fechaPrestamo) {
         this.fechaPrestamo = fechaPrestamo;
     }
+
+
 }

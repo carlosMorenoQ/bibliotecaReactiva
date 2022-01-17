@@ -2,10 +2,9 @@ package com.example.proyectbiblioteca.collections;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.Date;
 
-@Document
+@Document(collection = "recurso")
 public class Recurso {
 
     @Id
@@ -18,6 +17,28 @@ public class Recurso {
     private String tematica;
     private Boolean estaPrestado;
     private Date fechaPrestamo;
+
+
+    public Recurso() {
+    }
+
+    public Recurso(String id,
+                   String codigo,
+                   String titulo,
+                   String descripcion,
+                   String autor,
+                   String tipo,
+                   String tematica,
+                   Boolean estaPrestado) {
+        this.id = id;
+        this.codigo = codigo;
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.autor = autor;
+        this.tipo = tipo;
+        this.tematica = tematica;
+        this.estaPrestado = estaPrestado;
+    }
 
     public String getId() {
         return id;
